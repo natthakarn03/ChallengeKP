@@ -27,57 +27,58 @@ class Controller extends BaseController
     {
         $mov                   = new movie(); 
         $param['datamovie']  = $mov->getall(); 
-
-        $rev                   = new review(); 
-        $param['datareview']  = $rev->getall(); 
         return view('movieInput')->with($param); 
     }
 
     public function reviewInput()
     {
-        return view('reviewInput');
+        $rev                   = new review(); 
+        $param['datareview']  = $rev->getall(); 
+        return view('reviewInput')->with($param); 
     }
 
 
     public function postReview(Request $request) {
-        $idReview = $request->txtIdReview;
         $nama     = $request->txtNama;
         $comment  = $request->txtReview;
 
-        if($request->btnSubmit)
+        if($request->btnInsert)
         {
             DB::insert("insert into review values (0, '$nama', '$comment')"); 
+            return $this->reviewInput(); 
+        }
+        else if($request->btnUpdate) 
+        {
+            DB::update("update review set comment = '$comment' where namaReview = '$nama'"); 
+            return $this->reviewInput(); 
+        }
+        else if($request->btnDelete)
+        {
+            DB::delete("delete from review where namaReview = '$nama'"); 
             return $this->reviewInput(); 
         }
     }
 
     public function postMovie(Request $request) {
-        $idMovie = $request->txtIdMovie;
+        $ID      = $request->txtID;
         $nama    = $request->txtNama;
         $tahun   = $request->txtRilis;
 
-        if($request->btnSubmit)
+        if($request->btnInsert)
         {
             DB::insert("insert into movie values (0, '$nama', '$tahun')"); 
             return $this->movieInput(); 
         }
-    }
-    public function deleteMovie(Request $request) {
-        $idMovie = $request->txtidMovie;
-
-        if($request->btnDelete)
+        else if($request->btnUpdate) 
         {
-            DB::delete("delete from movie where idMovie = '$idMovie'"); 
-            return $this->movie(); 
+            //DB::update("update movie set namaMovie = '$nama' or tahunRilis = '$tahun' where idMovie = '$ID'"); 
+            DB::update("update movie set tahunRilis = '$tahun' where namaMovie = '$nama'"); 
+            return $this->movieInput(); 
         }
-    }
-    public function deleteReview(Request $request) {
-        $idReview = $request->txtidReview;
-        
-        if($request->btnDelete)
+        else if($request->btnDelete)
         {
-            DB::delete("delete from movie where idReview = '$idReview'"); 
-            return $this->movie(); 
+            DB::delete("delete from movie where namaMovie = '$nama'"); 
+            return $this->movieInput(); 
         }
     }
 }
