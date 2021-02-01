@@ -19,9 +19,3 @@ Route::get('/movieInput', ['uses'=>'Controller@movieInput']);
 
 Route::post('/postReview','Controller@postReview');
 Route::post('/postMovie','Controller@postMovie');
-
-Route::post('/deleteMovie','Controller@deleteMovie');
-Route::post('/deleteReview','Controller@deleteReview');
-
-Route::post('/updateMovie','Controller@updateMovie');
-Route::post('/updateReview','Controller@updateReview');
